@@ -1,47 +1,42 @@
-#include <iostream>
-#include <vector>
-#include <stack>
+#include<iostream>
+#include<stack>
+#include<vector>
 
 using namespace std;
 
 int main() {
-	int N;//수열의 개수
-	int num=0;
-	int flag = 0;
+	ios::sync_with_stdio;
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int N, now;
+	int num=1;
+	int flag = 0;//no 출력 여부
+
+	stack<int> stack;
+	vector<char> result;
 
 	cin >> N;
-	vector <int> A(N, 0);//수열
-	vector<char> result;//결과값 저장
-
-	stack <int> stack;//스택 선언
-
 	for (int i = 0; i < N; i++) {
-		cin >> A[i];
-	}
-
-	for (int i = 0; i < N; i++) {
+		cin >> now;
 		
-		//수열에서 해당 숫자가 나오기 전까지 삽입
-		while (num < A[i]) {
-			num++;
-			stack.push(num);
-			result.push_back('+');//삽입
+		//stack 추가
+		while (num <= now) {
+			stack.push(num++);
+			result.push_back('+');
 		}
-		
-		if (stack.top() == A[i]) {
+		//now와 같을 경우 pop
+		if (stack.top() == now) {
 			stack.pop();
 			result.push_back('-');
 		}
-		if (!stack.empty() &&stack.top() > A[i]) {
-			cout << "NO" << '\n';
-			flag = 1;//result 출력 여부 결정
+		else {//잘못된 스택
+			flag = 1;
 			break;
 		}
 	}
 
 	if (flag == 0) {
-		for (int i = 0; i < result.size(); i++) {
-			cout << result[i] << '\n';
-		}
-	}
+		for (int i = 0; i < result.size(); i++) cout << result[i] << '\n';
+	}else cout << "NO" << '\n';
 }
