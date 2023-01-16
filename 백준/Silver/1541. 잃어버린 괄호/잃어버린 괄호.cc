@@ -1,53 +1,44 @@
-#include <string>//split 라이브러리
-#include <sstream>
+/*036(1541)*/
+//split이용, string sstream 선언
+#include<sstream>
 #include<iostream>
+#include<string>
 #include<vector>
 #include<algorithm>
 
 using namespace std;
-
+//split 선언
 vector<string> split(string input, char delimiter) {
-	vector<string>result;
-	stringstream mystream(input);
+	vector<string> result;
+	stringstream mydata(input);
 	string splitdata;
 
-	while (getline(mystream, splitdata, delimiter)) {
+	while (getline(mydata, splitdata, delimiter)) {
 		result.push_back(splitdata);
 	}
-
 	return result;
 }
 
-int addAll(string A) {
-	int sum = 0;
-	//+를 기준으로 데이터 나누기
-	vector<string> A_vector = split(A, '+');
-
-	//string -> int로 변환 후 다 더함
-	for (int i = 0; i < A_vector.size(); i++) {
-		sum += stoi(A_vector[i]);
-	}
-
-	return sum;
-}
-
 int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	string sen;
-	int result=0;
-
 	cin >> sen;
-	//-기준으로 데이터 나누기
-	vector<string> sen_vector = split(sen, '-');
+	vector<string> A = split(sen, '-');
+	
+	int sum = 0;
 
-	for (int i = 0; i < sen_vector.size(); i++) {
-		int temp = addAll(sen_vector[i]);
-		if (i == 0) {
-			result += temp;
+	for (int i = 0; i < A.size(); i++) {
+		vector<string> B = split(A[i], '+');
+		int temp = 0;
+		for (int j = 0; j < B.size(); j++) {
+			temp += stoi(B[j]);
 		}
-		else {//나누기를 기준으로 다 빼기
-			result -= temp;
-		}
+		if (i == 0) sum = temp;
+		else sum -= temp;
 	}
 
-	cout << result;
+	cout << sum;
 }
