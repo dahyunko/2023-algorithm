@@ -1,57 +1,54 @@
-/*014-절대값 힙 구현하기*/
-#include <iostream>
-#include <vector>
+/*014(11286)- 절대값 힙 구하기*/
 #include <queue>
-#include <cstdlib>//절대값 구하는 함수: asb
-//float, double: cmath 이용
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<cmath>
+#include<vector>
 
 using namespace std;
 
-struct cmp {
-	//절대값이 더 작은 값에 우선순위를 높게 주고,
-	//절대값이 같다면 더 작은 값에 우선순위를 높게 준다.
-	bool operator()(int n1, int n2) {
-		if (abs(n1) > abs(n2)) {
-			return true;
-		}
-		else if (abs(n1) == abs(n2)) {
-			if (n1 > n2) return true;
-			else return false;
-		}
-		return false;
-	}
-
-};
-
 int main() {
-	ios::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
-
 	int N;
-	priority_queue <int, vector<int>, cmp > que;//우선순위 큐 선언
-	
+
 	cin >> N;
-	vector<int> x(N, 0);
-
+	priority_queue<int, vector<int>, greater<int>> pq_pos;
+	priority_queue<int, vector<int>, less<int>> pq_neg;
 	for (int i = 0; i < N; i++) {
-		cin >> x[i];
-	}
+		int now;
+		cin >> now;
 
-	for (int i = 0; i < N; i++) {
-		if (x[i] == 0) {
-			//cout << "out" << '\n';
-			//배열이 빈 경우 0출력
-			if (que.empty()) {
-				cout << '0' << '\n';
-			}
-			else {
-				cout << que.top() << '\n'; 
-				que.pop();
-			}
+		if (now > 0) {
+			pq_pos.push(now);
 		}
-		else {//추가
-			que.push(x[i]);
+		else if (now < 0) {
+			pq_neg.push(now);
+		}	
+		else if (now == 0) {
+			if (pq_pos.empty() && pq_neg.empty()) cout << 0 << '\n';
+			else {
+				if (pq_pos.empty()) {
+					cout << pq_neg.top() << '\n';
+					pq_neg.pop();
+				}
+				else if (pq_neg.empty()) {
+					cout << pq_pos.top() << '\n';
+					pq_pos.pop();
+				}
+				else {
+					if (pq_pos.top() >= abs(pq_neg.top())) {
+						cout << pq_neg.top() << '\n';
+						pq_neg.pop();
+					}
+					else {
+						cout << pq_pos.top() << '\n';
+						pq_pos.pop();
+					}
+				}
+			}
 		}
 	}
 }
