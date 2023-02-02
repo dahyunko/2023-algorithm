@@ -1,71 +1,72 @@
-/*034(1744)-수 묶어서 최대값 만들기*/
+/*034(1744)*/
 #include<queue>
+#include<numeric>
 #include<iostream>
-#include<vector>
+#include<string>
 #include<algorithm>
+#include<cmath>
+#include<vector>
 
 using namespace std;
 
 int main() {
-	int N, result = 0, zero = 0;
-	priority_queue<int, vector<int>,less<int>> pq_positive;
-	//양수는 큰 값부터 나오고
-	priority_queue<int, vector<int>, greater<int>> pq_negative;
-	//음수는 작은 값부터 나와야함
-	
+	int N;
 	cin >> N;
-
+	
+	vector<long> result;
+	priority_queue<int, vector<int>, less<int>> pq_pos;
+	priority_queue<int, vector<int>, greater<int>> pq_neg;
+	int cnt_Zero = 0;
+	int cnt_One = 0;
 	for (int i = 0; i < N; i++) {
 		int now;
-		cin >>now;
-
-		if (now == 1) {//1은 더해준다
-			result += now;
+		cin >> now;
+		
+		if (now > 1) {//양수
+			pq_pos.push(now);
 		}
-		else if (now > 1) {//양수는 양수끼리 따로 넣어준다.
-			pq_positive.push(now);
+		else if (now < 0) {//음수
+			pq_neg.push(now);
 		}
-		else if (now < 0) {//음수는 음수끼리
-			pq_negative.push(now);
+		else if(now == 0) {
+			cnt_Zero++;
 		}
-		else if (now == 0) {//0은 음수가 홀수개 존재시 사용
-			zero++;
+		else {//1일 경우
+			cnt_One++;
 		}
 	}
 
-	//양수 부터
-	while (!pq_positive.empty()) {
-		if (pq_positive.size() == 1) {//하나 남았을 경우 그냥 더해준다
-			result += pq_positive.top();
-			pq_positive.pop();
+	//양수 묶음
+	while (!pq_pos.empty()) {
+		if (pq_pos.size() == 1) {
+			result.push_back(pq_pos.top());
+			pq_pos.pop();
 		}
 		else {
-			int a, b;
-			a = pq_positive.top();
-			pq_positive.pop();
-			b = pq_positive.top();
-			pq_positive.pop();
-			result += a * b;
+			int a = pq_pos.top();
+			pq_pos.pop();
+			int b = pq_pos.top();
+			pq_pos.pop();
+			result.push_back(a * b);
 		}
 	}
 
-	//음수
-	while (!pq_negative.empty()) {
-		if (pq_negative.size() == 1) {//하나 남았을 경우 그냥 더해준다
-			if (zero ==  0) {//0이 없을 시 계산하고 있을 경우 0
-				result += pq_negative.top();
+	//음수 묶음
+	while (!pq_neg.empty()) {
+		if (pq_neg.size() == 1) {
+			if (cnt_Zero == 0) {//0이 존재할 시 음수 제거
+				result.push_back(pq_neg.top());
 			}
-			pq_negative.pop();
+			pq_neg.pop();
 		}
 		else {
-			int a, b;
-			a = pq_negative.top();
-			pq_negative.pop();
-			b = pq_negative.top();
-			pq_negative.pop();
-			result += a * b;
+			int a = pq_neg.top();
+			pq_neg.pop();
+			int b = pq_neg.top();
+			pq_neg.pop();
+			result.push_back(a * b);
 		}
 	}
 
-	cout << result << '\n';
+	cout << accumulate(result.begin(), result.end(), 0) + cnt_One;
 }
