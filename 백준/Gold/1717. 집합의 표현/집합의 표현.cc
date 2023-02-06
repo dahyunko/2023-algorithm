@@ -1,47 +1,46 @@
-/*050(1717)-집합 표현하기*/
-//union-find: 
-//union: 특정 2개의 노드를 연결해 1개의 집합
-//find: 두노드가 같은 집합에 속해 있는지 확인
+/*050(1717)- 집합의 표현*/
 #include<iostream>
-#include<vector>
+#include<string>
 #include<algorithm>
+#include<cmath>
+#include<vector>
 
 using namespace std;
 
-int g_find(int a, vector<int>& parent) {
-	if (a == parent[a]) return a;
-	else return parent[a] = g_find(parent[a], parent);
+int find(vector<int>& A, int a) {
+	if (a == A[a]) return a;
+	return A[a] = find(A, A[a]);
 }
 
-void g_union(int a, int b, vector<int>& parent) {
-	a = g_find(a, parent);
-	b = g_find(b, parent);
-
-	if (a != b) parent[b] = a;
+void Union(vector<int>& A, int a, int b) {
+	a = find(A, a);
+	b = find(A, b);
+	if (a != b) A[b] = a;
 }
 
 int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
-	int n, m;
+	int N, M;
 
-	cin >> n >> m;
-	vector<int> parent(n + 1);
+	cin >> N >> M;
+	vector<int>parent(N + 1);
+	
+	//대표 노드 설정
+	for (int i = 0; i <= N; i++) parent[i] = i;
 
-	//대표 노드를 자신으로 초기화
-	for (int i = 0; i <= n; i++) parent[i] = i;
-
-	for (int i = 0; i < m; i++) {
-		int c, a, b, result;
-		cin >> c >> a >> b;
-		
-		if (c == 0) {//union
-			g_union(a, b, parent);
+	for (int j = 0; j < M; j++) {
+		int a, b, c;
+		cin >> a >> b >> c;
+		if (a == 0) {//union
+			Union(parent, b, c);
 		}
-		else {//find
-			if (g_find(a, parent) == g_find(b, parent)) cout << "YES" << '\n';
-			else cout << "NO" << '\n';
+		else {
+			b = find(parent, b);
+			c = find(parent, c);
+			if (b == c) cout << "YES\n";
+			else cout << "NO\n";
 		}
 	}
 }
