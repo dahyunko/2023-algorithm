@@ -1,7 +1,4 @@
-/*031(1300)- k번째 수 구하기 */
-//idea: k를 넘지 않을 것: start = 1, end = k
-//각 행에서 해당 숫자보다 작거나 같은 숫자: n/A[i]개
-//이진 탐색
+/*31(1300)*/
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -11,32 +8,31 @@
 using namespace std;
 
 int main() {
-	int N,K;
-	
+	int N, K;
 	cin >> N >> K;
+	
 	vector<int> A(N + 1);
-	//각 행의 첫번째 숫자 저장
 	for (int i = 1; i <= N; i++) A[i] = i;
-
-	//1~K까지 탐색 시작
-	int start = 1, end = K;
-	long result = 0;
-	while (start <= end) {
-		int mid = (start + end) / 2;//중앙값
+	int l = 1, r = K;
+    long result =0;
+    
+	while (l <= r) {
+		int mid = (l + r) / 2;
 		int cnt = 0;
-		//mid보다 작거나 같은 수의 개수
+	
+		//각 행의 mid와 같거나 작은 수 개수
 		for (int i = 1; i <= N; i++) {
-			//배열을 넘어가는 경우
-			cnt += min(mid / A[i], N);
+			cnt += min(N, mid / A[i]);
 		}
 
-		if (cnt >= K) {
-			end = mid - 1;
-			//현재 단계의 중앙값을 정답 변수에 저장
-			result = mid;
-		}
-		else start = mid + 1;
+		//cnt와 mid값 비교하면서 l,r값 조정
+		if (cnt >= K){
+            r = mid - 1;
+            result = mid;
+        }
+		else l = mid + 1;
 	}
 
+	//k번째 수
 	cout << result;
 }
