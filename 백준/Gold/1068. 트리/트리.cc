@@ -1,69 +1,52 @@
-/*068(1068)- 리프 노드의 개수 구하기*/
-#include<iostream>
-#include<string>
+/*1068- 트리*/
+//dfs
+#include <iostream>
 #include<vector>
+#include<cmath>
 #include<algorithm>
+#include<string>
 
 using namespace std;
 
-typedef pair<char, char> info;
-
-void Bfs_tree(vector<vector<int>> &tree, vector<info> &visited, int v) {
-	visited[v].first = 'T';
-	int v_count = 0;
-
-	for (int i = 0; i < tree[v].size(); i++) {
-		int t = tree[v][i];
-
-		if (visited[t].first == 'F') {
-			if (visited[t].second != 'B') {
-				v_count++;
-				Bfs_tree(tree, visited, t);
-			}
+void dfs(vector<vector<int>> &graph, vector<char> &visited, vector<char>& color, int v){
+	if (visited[v] == 'T' || color[v] == 'B')return;
+	visited[v] = 'T';
+	
+	int flag = 0;
+	for (int i = 0; i < graph[v].size(); i++) {
+		int t = graph[v][i];
+		if (visited[t] == 'F' && color[t] != 'B') {
+			flag = 1;
+			dfs(graph, visited, color, t);
 		}
 	}
 
-	//리프 노드인것
-	if (v_count == 0) visited[v].second = 'G';
+	if (flag == 0) color[v] = 'G';
 }
 
 int main() {
-	int N, remove_n, root;
-
+	int N;
+		
 	cin >> N;
-	vector<vector<int>> tree;
-	tree.resize(N);
-	vector<int> parent(N);
-	vector <info> visited(N, info('F','W'));
-	//처음: white, 리프: Green, 삭제: B
-	
-	//부모 노드 저장 & 트리 생성
+	vector<vector<int>> graph(N + 1);
+	vector<char> visited(N + 1, 'F');
+	vector<char> color(N + 1, 'W');//white(부모), green(리프), black(삭제)
+	int root;
+
 	for (int i = 0; i < N; i++) {
 		int now;
 		cin >> now;
-		parent[i] = now;
-		if (now != -1) {
-			tree[i].push_back(now);
-			tree[now].push_back(i);
-		}
-		else {
-			root = i;
-		}
+		if (now == -1) root = i;
+		else graph[now].push_back(i);
 	}
+	int delete_node;
+	cin >> delete_node;
+	color[delete_node] = 'B';
+	dfs(graph, visited, color, root);
 
-	//지울 노드
-	cin >> remove_n;
-	visited[remove_n].second = 'B';
-	if (remove_n == root) {//루트 노드를 지우면 트리 삭제 되는것
-		cout << 0;
+	int cnt = 0;
+	for (int i = 0; i < N; i++) {
+		if (color[i] == 'G') cnt++;
 	}
-	else {
-		//리프 탐색
-		Bfs_tree(tree, visited, root);
-		int count = 0;
-		for (int i = 0; i < N; i++) {
-			if (visited[i].second == 'G') count++;
-		}
-		cout << count;
-	}
+	cout << cnt;
 }
