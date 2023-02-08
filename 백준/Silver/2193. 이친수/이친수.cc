@@ -1,29 +1,22 @@
-/*086(2193)- 이친수 구하기*/
+/*2193- 이친수 구하기*/
 #include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+#include<string>
 
 using namespace std;
-typedef pair<long, long> info;//1 개수, 0 개수
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    int N;
-    cin >> N;
+	int N;
 
-    vector<info> A;
-    A.resize(N + 1);
+	cin >> N;
+	vector<long long>A(N + 1, 0);
 
-    A[0].first = 1;
-    A[0].second = 0;
-
-    for (int i = 1; i < N; i++) {
-        A[i].first = A[i - 1].second;
-        A[i].second = A[i - 1].first + A[i - 1].second;
-    }
-
-    cout << A[N - 1].first + A[N - 1].second;
+	A[1] = 1;
+	A[2] = 1;
+	for (int i = 3; i <= N; i++) {
+		A[i] = A[i - 1] + A[i - 2];
+	}
+	cout << A[N];
 }
