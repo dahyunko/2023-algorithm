@@ -1,67 +1,53 @@
-/*1517- 버블 소트*/
-//합병 정렬 이용
-#include<iostream>
-#include<string>
+/*1517*/
+#include <iostream>
 #include<algorithm>
-#include<cmath>
 #include<vector>
+#include<string>
 
 using namespace std;
 
-static long cnt = 0;
-static int N;
-static int list[500001];
+static long cnt = 0, N;
 
-void merge(int* A, int start, int end, int mid) {
-
-	int i = start, j = mid + 1;
-	int k = start;
-	while (i <= mid && j <= end) {
-		if (A[i] <= A[j]) {
-			list[k++] = A[i++];
-		}
+void merge(int* A, int left, int right, int mid) {
+	int list[500001];
+	int i = left, j = mid + 1;
+	int k = left;
+	while (i <= mid && j <= right) {
+		if (A[i] <= A[j]) list[k++] = A[i++];
 		else { 
 			list[k++] = A[j++]; 
-			cnt = cnt + j - k;//swap 몇번 되는 지 계산
+			cnt += j - k;//swap된 만큼
 		}
 	}
 
 	if (i > mid) {
-		for (int t = j; t <= end; t++) {
-			list[k++] = A[t];
-		}
+		for (int t = j; t <= right; t++) list[k++] = A[t];
 	}
 	else {
-		for (int t = i; t <= mid; t++) {
-			list[k++] = A[t];
-		}
+		for (int t = i; t <= mid; t++) list[k++] = A[t];
 	}
 
-	for (int t = start; t <= end; t++) {
-		A[t] = list[t];
-	}
+	for (int t = left; t <= right; t++) A[t] = list[t];
 }
 
-void merge_sort(int *A, int start, int end) {
-	if (start >= end)return;
-	int mid = (start + end) / 2;
-	merge_sort(A, start, mid);
-	merge_sort(A, mid+1, end);
-	merge(A, start, end, mid);
-}
+void merge_sort(int* A, int left, int right) {
+	if (left >= right) return;
+	int mid = (left + right) / 2;
+	merge_sort(A, left, mid);
+	merge_sort(A, mid + 1, right);
 
+	merge(A, left, right, mid);
+}
 
 int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(NULL);
-	cout.tie(NULL);
 	cin >> N;
 	int A[500001];
+	for (int i = 0; i < N; i++) cin >> A[i];
 
-	for (int i = 0; i < N; i++) {
-		cin >> A[i];
-	}
-
+	//합병 정렬
 	merge_sort(A, 0, N - 1);
+
 	cout << cnt;
 }
