@@ -9,7 +9,7 @@ using namespace std;
 int N, M;
 int ans[9];
 
-void dfs(int cnt, vector<bool>&visited) {
+void dfs(int cnt, vector<bool>&visited, int j) {
 	if (cnt == M) {
 		for (int i = 0; i < M; i++) {
 			cout << ans[i] << ' ';
@@ -18,12 +18,12 @@ void dfs(int cnt, vector<bool>&visited) {
 		return;
 	}
 
-	for (int i = 1; i <= N; i++) {
+	for (int i = j; i <= N; i++) {
 		if (!visited[i]) {
 			visited[i] = true;
 			ans[cnt] = i;
-			dfs(cnt + 1, visited);
-			for (int j = i + 1; j <= N; j++) visited[j] = false;
+			dfs(cnt + 1, visited,i+1);
+			visited[i] = false;
 		}
 	}
 }
@@ -31,5 +31,5 @@ void dfs(int cnt, vector<bool>&visited) {
 int main() {
 	cin >> N >> M;
 	vector<bool>visited(9, false);
-	dfs(0, visited);
+	dfs(0, visited, 1);
 }
