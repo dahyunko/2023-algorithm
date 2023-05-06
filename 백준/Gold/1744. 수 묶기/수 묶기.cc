@@ -1,72 +1,56 @@
-/*034(1744)*/
-#include<queue>
-#include<numeric>
+/*1744*/
 #include<iostream>
+#include<vector>
 #include<string>
 #include<algorithm>
-#include<cmath>
-#include<vector>
-
+#include<queue>
 using namespace std;
 
 int main() {
-	int N;
+	int N, cnt_zero =0, sum=0;
 	cin >> N;
-	
-	vector<long> result;
-	priority_queue<int, vector<int>, less<int>> pq_pos;
-	priority_queue<int, vector<int>, greater<int>> pq_neg;
-	int cnt_Zero = 0;
-	int cnt_One = 0;
+
+	priority_queue<int, vector<int>, less<int>>p_pq;
+	priority_queue<int, vector<int>, greater<int>>m_pq;
+
 	for (int i = 0; i < N; i++) {
-		int now;
-		cin >> now;
+		int v;
+		cin >> v;
 		
-		if (now > 1) {//양수
-			pq_pos.push(now);
-		}
-		else if (now < 0) {//음수
-			pq_neg.push(now);
-		}
-		else if(now == 0) {
-			cnt_Zero++;
-		}
-		else {//1일 경우
-			cnt_One++;
-		}
+		if (v == 0) cnt_zero++;
+		else if (v == 1)sum++;
+		else if (v > 1) p_pq.push(v);
+		else m_pq.push(v);
 	}
 
-	//양수 묶음
-	while (!pq_pos.empty()) {
-		if (pq_pos.size() == 1) {
-			result.push_back(pq_pos.top());
-			pq_pos.pop();
-		}
+	while (p_pq.size() > 1) {
+		int a = p_pq.top();
+		p_pq.pop();
+		int b = p_pq.top();
+		p_pq.pop();
+
+		sum += a * b;
+	}
+	if (!p_pq.empty()) { 
+		sum += p_pq.top(); 
+		p_pq.pop();
+	}
+
+	while (m_pq.size() > 1) {
+		int a = m_pq.top();
+		m_pq.pop();
+		int b = m_pq.top();
+		m_pq.pop();
+
+		sum += a * b;
+	}
+	if (!m_pq.empty()) {
+		if (cnt_zero > 0) m_pq.pop();
 		else {
-			int a = pq_pos.top();
-			pq_pos.pop();
-			int b = pq_pos.top();
-			pq_pos.pop();
-			result.push_back(a * b);
+			sum += m_pq.top();
+			m_pq.pop();
 		}
 	}
-
-	//음수 묶음
-	while (!pq_neg.empty()) {
-		if (pq_neg.size() == 1) {
-			if (cnt_Zero == 0) {//0이 존재할 시 음수 제거
-				result.push_back(pq_neg.top());
-			}
-			pq_neg.pop();
-		}
-		else {
-			int a = pq_neg.top();
-			pq_neg.pop();
-			int b = pq_neg.top();
-			pq_neg.pop();
-			result.push_back(a * b);
-		}
-	}
-
-	cout << accumulate(result.begin(), result.end(), 0) + cnt_One;
+	
+	cout << sum;
 }
