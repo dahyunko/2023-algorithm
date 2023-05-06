@@ -26,23 +26,15 @@ string solution(string s) {
     vector<string>A = split(s, ' ');
     for(int i=0;i<A.size();i++){
         int num;
-        if(A[i][0] == '-'){
-            string str;
-            for(int j=1;j<A[i].length();j++) str.push_back(A[i][j]);
-            num = stoi(str);
-            num *= -1;
-        }else num = stoi(A[i]);        
+        num = stoi(A[i]);//'-' 인식 함
         
         pq.push(info(num, A[i]));
     }
     
-    for(int i=0;i<pq.top().second.length();i++){
-        answer.push_back(pq.top().second[i]);   
-    }
+    for(int i=0;i<pq.top().second.length();i++) answer.push_back(pq.top().second[i]);   
     answer.push_back(' ');
     while(pq.size()>1) pq.pop();
-    for(int i=0;i<pq.top().second.length();i++){
-        answer.push_back(pq.top().second[i]);   
-    }
+    for(int i=0;i<pq.top().second.length();i++) answer.push_back(pq.top().second[i]);   
+    
     return answer;
 }
