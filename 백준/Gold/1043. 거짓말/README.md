@@ -8,7 +8,7 @@
 
 ### 분류
 
-자료 구조(data_structures), 분리 집합(disjoint_set), 그래프 이론(graphs), 그래프 탐색(graph_traversal)
+자료 구조, 분리 집합, 그래프 이론, 그래프 탐색
 
 ### 문제 설명
 

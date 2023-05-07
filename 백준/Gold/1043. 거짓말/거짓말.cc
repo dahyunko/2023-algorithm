@@ -1,72 +1,73 @@
-/*1043- 거짓말쟁이가 되긴 시러*/
+/*1043*/
 #include<iostream>
+#include<vector>
 #include<string>
 #include<algorithm>
+#include<queue>
 #include<cmath>
-#include<vector>
+#include<tuple>
 
 using namespace std;
 
-int find(vector<int>& A, int a) {
-	if (A[a] == a) return a;
-	return A[a] = find(A, A[a]);
+int parent[51];
+
+int find(int a) {
+	if (a == parent[a]) return a;
+	return parent[a] = find(parent[a]);
 }
 
-void Union(vector<int>&A, int a, int b) {
-	a = find(A, a);
-	b = find(A, b);
-	if (a != b) A[b] = a;
+void Union(int a, int b) {
+	a = find(a);
+	b = find(b);
+
+	if (a != b)parent[b] = a;
 }
 
 int main() {
 	int N, M;
-	int K;
-
 	cin >> N >> M;
-	vector<int> parent(N + 1, 0);
-	vector<vector<int>> meet_info(M+1);
 
-	cin >> K;//아는 사람
-	vector<int> know_p(K);
-	for (int i = 0; i < K; i++) {
-		cin >> know_p[i];
+	for (int i = 1; i <= N; i++) parent[i] = i;
+	vector<vector<int>>party(M);
+	vector<bool> truth(N + 1, false);
+
+	int truth_cnt;
+	cin >> truth_cnt;
+	for (int i = 0; i < truth_cnt; i++) {
+		int now;
+		cin >> now;
+
+		truth[now] = true;
 	}
 
-	//파티 수, 인원 입력 받음
 	for (int i = 0; i < M; i++) {
-		int meet_p;
-		cin >> meet_p;
-		for (int j = 0; j < meet_p; j++) {
+		int people;
+		cin >> people;
+		for (int j = 0; j < people; j++) {
 			int now;
 			cin >> now;
-			meet_info[i].push_back(now);
+			party[i].push_back(now);
 		}
 	}
 
-	//부모 설정
-	for (int i = 0; i <= N; i++) parent[i] = i;
-
-	//union-find 실행
 	for (int i = 0; i < M; i++) {
-		int first_p = meet_info[i][0];
-		for (int j = 1; j < meet_info[i].size(); j++) {
-			Union(parent, first_p, meet_info[i][j]);
+		for (int j = 0; j < party[i].size()-1; j++) {
+			int a = find(party[i][j]);
+			int b = find(party[i][j+1]);
+
+			Union(a, b);
+			if (truth[a] || truth[b]) truth[a] = true;
 		}
 	}
 
-	//거짓말 가능 여부
 	int cnt = 0;
 	for (int i = 0; i < M; i++) {
-		bool isPossible = true;
-		int cur = meet_info[i][0];
-		//거짓말을 아는 사람
-		for (int j = 0; j < K; j++) {
-			if (find(parent, know_p[j]) == find(parent, cur)) {
-				isPossible = false;
-				break;
-			}
+		bool flag = false;
+		for (int j = 0; j < party[i].size(); j++) {
+			int a = party[i][j];
+			if (truth[find(a)]) flag = true;
 		}
-		if (isPossible == true) cnt++;
+		if (!flag) cnt++;
 	}
 
 	cout << cnt;
