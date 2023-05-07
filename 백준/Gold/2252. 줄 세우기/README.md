@@ -8,7 +8,7 @@
 
 ### 분류
 
-그래프 이론(graphs), 위상 정렬(topological_sorting)
+그래프 이론, 위상 정렬
 
 ### 문제 설명
 

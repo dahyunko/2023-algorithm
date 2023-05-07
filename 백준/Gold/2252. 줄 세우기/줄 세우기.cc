@@ -1,47 +1,46 @@
-/*053(2252)-줄 세우기*/
-//위상정렬
-#include <queue>
+/*2252*/
 #include<iostream>
 #include<vector>
+#include<string>
 #include<algorithm>
+#include<queue>
+#include<cmath>
+#include<tuple>
 
 using namespace std;
 
-void bfs(vector<vector<int>>& graph, vector<int>& D) {
-	queue<int> que;
-
-	for (int i = 1; i < D.size(); i++) {
-		if (D[i] == 0) que.push(i);
-	}
-
-	while (!que.empty()) {
-		int x = que.front();
-		que.pop();
-		cout << x << ' ';
-		for (int i = 0; i < graph[x].size(); i++) {
-			int t = graph[x][i];
-			D[t]--;
-			if (D[t] == 0) que.push(t);
-		}
-	}
-}
 
 int main() {
-	int N, M, x;
-	
+	int N, M;
 	cin >> N >> M;
-	vector<vector<int>> graph;
-	vector<int> D(N + 1, 0);
-	//vector<char> visited(N+1, 'F');
-	graph.resize(N + 1);
+
+	vector<vector<int>>graph(N + 1);
+	vector<int>dep(N + 1, 0);
 
 	for (int i = 0; i < M; i++) {
 		int a, b;
 		cin >> a >> b;
-		if (i == 0) x = a;
+
 		graph[a].push_back(b);
-		D[b]++;
+		dep[b]++;
 	}
 
-	bfs(graph, D);
+	queue<int>q;
+	for (int i = 1; i <= N; i++) {
+		if (dep[i] == 0) q.push(i);
+	}
+
+	while (!q.empty()) {
+		int v = q.front();
+		q.pop();
+
+		if (dep[v] == 0) cout << v << ' ';
+		
+		for (int i = 0; i < graph[v].size(); i++) {
+			int t = graph[v][i];
+			dep[t]--;
+
+			if (dep[t] == 0) q.push(t);
+		}
+	}
 }
