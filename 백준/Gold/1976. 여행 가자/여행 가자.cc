@@ -27,16 +27,14 @@ int main() {
 	vector<int> parent(N + 1);
 	vector<int> visit(M, 0);
 
-	for (int i = 1; i <= N; i++) {
-		parent[i] = i;
-	}
+	for (int i = 1; i <= N; i++) parent[i] = i;
 
 	//도시들 연결
 	for (int i = 1; i <= N; i++) {
 		for (int j = 1; j <= N; j++) {
 			int now;
 			cin >> now;
-			if (now == 1) {
+			if (now == 1 && j > i) {
 				Union(i, j, parent);
 			}
 		}
@@ -50,9 +48,9 @@ int main() {
 	for (int i = 0; i < M-1; i++) {
 		int a = visit[i];
 		int b = visit[i+1];
-        a = find(a, parent);
+		a = find(a, parent);
 		b = find(b, parent);
-		if (parent[a] != parent[b]) flag++;
+		if (a != b) flag++;
 	}
 
 	if (flag > 0) cout << "NO";
