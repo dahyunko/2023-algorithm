@@ -1,30 +1,30 @@
 /*1300*/
-#include <iostream>
-#include<algorithm>
+#include<iostream>
 #include<vector>
 #include<string>
+#include<algorithm>
+#include<queue>
+#include<stack>
+#include<cmath>
+#include<tuple>
+#include<limits.h>
 
 using namespace std;
 
 int main() {
-	int N, K;
-	
-	cin >> N >> K;
-	vector<int>A(N + 1);
+	int N, k;
+	cin >> N >> k;
 
-	for (int i = 1; i <= N; i++) A[i] = i;
+	int left = 1, right = k;
 
-	int left = 1, right = K;
-	while (left <= right) {
-		int cnt = 0;
+	while(left<=right){
 		int mid = (left + right) / 2;
+		int cnt = 0;
 
-		for (int i = 1; i <= N; i++) {
-			cnt += min(N, mid / A[i]);
-		}
+		for (int i = 1; i <= N; i++) cnt += min(mid / i, N);
 
-		if (cnt >= K) right = mid - 1;
-		else left = mid + 1;
+		if (cnt < k) left = mid + 1;
+		else right = mid - 1;
 	}
 
 	cout << left;
