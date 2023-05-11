@@ -1,44 +1,41 @@
-/*012(1728)-오큰수 구하기*/
-#include <deque>
+/*17298*/
 #include<iostream>
+#include<vector>
 #include<string>
 #include<algorithm>
+#include<queue>
+#include<stack>
 #include<cmath>
-#include<vector>
+#include<tuple>
+#include<limits.h>
 
 using namespace std;
 
-typedef pair<int, int> info;
-
 int main() {
 	int N;
-	
 	cin >> N;
-	deque<info> dq;
-	vector<int> result(N);
-	vector<int> A(N);
 
-	for (int i = 0; i < N; i++) {
-		cin >> A[i];
-	}
+	vector<int>ans(N);
+	vector<int>A(N);
+	for (int i = 0; i < N; i++) cin >> A[i];
 
-	dq.push_back(info(A[0], 0));
+	stack<int>s;
+	s.push(A[N - 1]);
+	ans[N - 1] = -1;
 
-	for (int i = 1; i < N; i++) {
-		while (A[i] > dq.back().first) {
-			result[dq.back().second] = A[i];
-			dq.pop_back();
-			if (dq.empty()) break;
+	for (int i = N - 2; i >= 0; i--) {
+        //더 큰값을 찾는 것
+		while (!s.empty() && A[i] >= s.top()) s.pop();
+
+		if (s.empty()) {
+			ans[i] = -1;
+			s.push(A[i]);
+			continue;
 		}
-		dq.push_back(info(A[i], i));
-	}
 
-	while (!dq.empty()) {
-		result[dq.back().second] = -1;
-		dq.pop_back();
+		ans[i] = s.top();
+		s.push(A[i]);
 	}
-
-	for (int i = 0; i < N; i++) {
-		cout << result[i] << ' ';
-	}
+	
+	for (int i = 0; i < N; i++) cout<<ans[i]<<' ';
 }
