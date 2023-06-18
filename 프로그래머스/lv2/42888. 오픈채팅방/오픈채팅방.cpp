@@ -27,11 +27,9 @@ vector<string> solution(vector<string> record) {
         if(info[0][0] =='E'){//들어온것
             m[info[1]] = info[2];
             line.push_back({info[1],true});
-            //answer.push_back(info[2]+"님이 들어왔습니다.");
         }
         else if(info[0][0] =='L'){//나간것
             line.push_back({info[1],false});
-            //answer.push_back(m[info[1]]+"님이 나갔습니다.");
         }
         else if(info[0][0] =='C'){//바꾼것
             m[info[1]] = info[2];
