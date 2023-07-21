@@ -1,39 +1,38 @@
 /*1863*/
 #include <iostream>
-#include<string>
-#include<vector>
-#include<algorithm>
-#include<limits.h>
-#include<map>
-#include<set>
-#include<queue>
-#include<stack>
-
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <limits.h>
+#include <map>
+#include <set>
+#include <queue>
+#include <stack>
+#include <cmath>
 using namespace std;
 
-/*1863*/
-
 int main() {
-	int N;
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+
+	int N, cnt = 0;
 	cin >> N;
 
 	stack<int>s;
-	int cnt = 0;
+	for (int i = 0; i < N; i++) {
+		int x, y;
+		cin >> x >> y;
 
-	for (int t = 0; t < N; t++) {
-		int x;
-		int now;
-		cin >> x >> now;
-
-		while (!s.empty() && s.top() > now) {
-			s.pop();
+		while (!s.empty() && s.top() > y) {
 			cnt++;
+			s.pop();
 		}
-		if (!s.empty() && s.top() == now) continue;
-		s.push(now);
+
+		if (!s.empty() && s.top() == y) continue;
+		s.push(y);
 	}
 	while (!s.empty()) {
-		if(s.top() > 0) cnt++;
+		if (s.top() > 0)cnt++;
 		s.pop();
 	}
 
