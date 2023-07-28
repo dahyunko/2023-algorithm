@@ -1,59 +1,43 @@
-/*9336*/
+/*16*/
 #include<iostream>
-#include<string>
 #include<vector>
+#include<string>
 #include<algorithm>
+#include <queue>
+#include <cmath>
+#include<limits.h>
 
 using namespace std;
 
-int N; 
-int result = 0;
-bool visited[15][15] = { false };
-int ans[15][15] = { 0 };
+int N, ans = 0;
+int col[16];
 
-void dfs(int cnt, int i) {
-	if (cnt == N) {	result++; return; }
-	if (i == N) return;
+void search(int t) {
+	if (t == N) {
+		ans++;
+		return;
+	}
 
-	for (int j = 0; j < N; j++) {
-		if (!visited[i][j]) {
-			int a = i, b = j;
-			while (!visited[a][b]) {
-				a--;
-				b--;
-				if (a < 0) { a = 0; b++; break; }
-				if (b < 0) { b = 0; a++; break; }
+	for (int i = 0; i < N; i++) {
+		col[t] = i;
+		bool can = true;
+		for (int j = 0; j < t; j++) {
+			//대각선 같은 라인 확인하는 부분
+			//**아이디어!!, 이중 배열로 돌리면 시간초과 발생함
+			if (col[t] == col[j] || abs(col[t] - col[j]) == t - j) {
+				can = false;
+				break;
 			}
-			if (visited[a][b]) continue;
-			
-			a = i, b = j;
-			while (!visited[a][b]){
-				a--;
-				if (a < 0) { a = 0; break; }
-			}
-			if (visited[a][b]) continue;
-
-			a = i, b = j;
-			while (!visited[a][b]) {
-				a--;
-				b++;
-				if (a < 0) { a = 0; b--; break; }
-				if (b > N - 1) { b = N - 1; a++; break; }
-			}
-			if (visited[a][b]) continue;
-
-			visited[i][j] = true;
-			ans[i][j] = 1;
-			dfs(cnt + 1, i + 1);
-			visited[i][j] = false;
-			ans[i][j] = 0;
 		}
+		if (can) search(t + 1);
 	}
 }
 
 int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
 	cin >> N;
-	dfs(0, 0);
 
-	cout << result;
+	search(0);
+	cout << ans;
 }
