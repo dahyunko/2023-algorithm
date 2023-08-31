@@ -21,7 +21,7 @@ bool cmp(info a, info b){
 vector<string> solution(vector<string> files) {
     int N = files.size();
     vector<info>A(N);
-    
+
     for(int i=0;i<files.size();i++){
         A[i].all = files[i];
         A[i].idx = i;
@@ -44,9 +44,9 @@ vector<string> solution(vector<string> files) {
         A[i].num = stoi(A[i].number);
         //cout<< A[i].all<<'/'<< A[i].head<<'/'<< A[i].num<<'/'<< A[i].tail<<'/'<<'\n';
     }
-    
+
     sort(A.begin(), A.end(), cmp);
-    
+
     vector<string> answer;
     for(int i=0;i<A.size();i++) answer.push_back(A[i].all);    
     return answer;
