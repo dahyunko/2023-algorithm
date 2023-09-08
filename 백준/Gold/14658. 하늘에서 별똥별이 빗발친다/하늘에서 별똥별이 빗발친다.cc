@@ -1,51 +1,42 @@
 /*14658*/
+//idea: 모든 구역을 L만큼 탐색 => 시간 초과 발생 + 메모리 초과
+//따라서, 별똥별 2개를 기준으로 x, y 잡아와서 L의 범위 안에 
+//별동별이 존재하는지 확인해 보는 것 => 시간, 메모리 초과 해결
 #include<iostream>
-#include<vector>
 #include<string>
+#include<vector>
 #include<algorithm>
-#include <queue>
-#include <cmath>
+#include<queue>
 #include<limits.h>
-#include<set>
-#include<map>
+#include<cmath>
 
 using namespace std;
 
+struct info {
+	int x, y;
+};
+
 int main() {
-	int N, M, L, K;
+	int N, M, L, K, ans = 0;
 	cin >> N >> M >> L >> K;
 
-	vector<pair<int, int>> ground(K);
+	vector<info>star(K);
+	for (int i = 0; i < K; i++) cin >> star[i].x >> star[i].y;
 
-	//별동별
-	for (int i = 0; i < K; i++) {
-		int a, b;
-		cin >> a >> b;
-		
-		ground[i] = { b,a };
-	}
-	
-	int ans = 0;
-	
-	//시간 복잡도 + 공간 복잡도
-	//별동별의 개수로 접근해야함
-	//별동별은 최대 100개 임으로 이를 K^3 을 진행해도 됨
-	//별동별 2개 잡고 a.x, b.y 를 기준으로 별동별 탐색 진행해야함
-	//K^3 이기 때문에 a와 b가 바뀌고 현재 자신도 보기 때문에 모든 경우 탐색 가능
+	//3중 for문 => K^3
 	for (int i = 0; i < K; i++) {
 		for (int j = 0; j < K; j++) {
-			int temp = 0;
-			int a = ground[i].first;
-			int b = ground[j].second;
-			for (int k = 0; k < K; k++) {
-				int na = ground[k].first;
-				int nb = ground[k].second;
-				//별동별이 떨어지는 위치여서 길이기 L이면 L+1개의 점을 확인해야함
-				if (a <= na && a + L >= na && b <= nb && b + L >= nb) temp++;
+			int a = star[i].x;
+			int b = star[j].y;
+			int cnt = 0;
+
+			for (int t = 0; t < K; t++) {
+				if (star[t].x >= a && star[t].x <= a + L && star[t].y >= b && star[t].y <= b + L) cnt++;
 			}
-			ans = max(ans, temp);
+			ans = max(ans, cnt);
 		}
 	}
-    //튕겨나간 별동별 개수
+
+    //지구에 떨어지는 별의 개수
 	cout << K - ans;
 }
