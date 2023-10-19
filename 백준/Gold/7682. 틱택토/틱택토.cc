@@ -1,54 +1,69 @@
 /*7682*/
 #include<iostream>
-#include<vector>
 #include<string>
+#include<vector>
 #include<algorithm>
-#include<map>
-#include<sstream>
+#include<queue>
 #include<limits.h>
-#include<tuple>
+#include<cmath>
 
 using namespace std;
 
 char A[3][3];
 
-bool it_has(char c) {
-	int cnt = 0;
+bool check_case(char c) {
+	bool isfind = false;
 
-	if (A[0][0] == A[0][1] && A[0][1] == A[0][2] && A[0][0] == c) cnt++;
-	if (A[1][0] == A[1][1] && A[1][1] == A[1][2] && A[1][0] == c) cnt++;
-	if (A[2][0] == A[2][1] && A[2][1] == A[2][2] && A[2][0] == c) cnt++;
-	if (A[0][0] == A[1][1] && A[1][1] == A[2][2] && A[0][0] == c) cnt++;
-	if (A[2][0] == A[1][1] && A[1][1] == A[0][2] && A[2][0] == c) cnt++;
-	if (A[0][0] == A[1][0] && A[1][0] == A[2][0] && A[0][0] == c) cnt++;
-	if (A[0][1] == A[1][1] && A[1][1] == A[2][1] && A[0][1] == c) cnt++;
-	if (A[0][2] == A[1][2] && A[1][2] == A[2][2] && A[0][2] == c) cnt++;
+	//가로
+	for (int i = 0; i < 3; i++) {
+		if (A[i][0] == c && A[i][1] == c && A[i][2] == c) isfind = true;
+	}
+
+	//세로
+	for (int i = 0; i < 3; i++) {
+		if (A[0][i] == c && A[1][i] == c && A[2][i] == c) isfind = true;
+	}
+
+	//대각선
+	if (A[0][0] == c && A[1][1] == c && A[2][2] == c) isfind = true;
+	if (A[0][2] == c && A[1][1] == c && A[2][0] == c) isfind = true;
 	
-	if(cnt == 0)return false;
-	return true;
+	return isfind;
 }
 
 int main() {
 	while (true) {
-		string s;
-		cin >> s;
-		if (s == "end") break;
+		string now;
+		cin >> now;
+		if (now == "end") break;
 
-		int t = 0, x_cnt =0, o_cnt = 0;
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) { 
-				if (s[t] == 'X') x_cnt++;
-				else if (s[t] == 'O') o_cnt++;
-				A[i][j] = s[t++]; 
-			}
+		int cx = 0, co = 0;
+
+		for (int i = 0; i < now.length(); i++) {
+			int a = i / 3;
+			int b = i % 3;
+
+			if (now[i] == 'O') co++;
+			else if (now[i] == 'X') cx++;
+
+			A[a][b] = now[i];
 		}
 
-		bool x_has = it_has('X');
-		bool o_has = it_has('O');
-
-		if (!x_has && !o_has && x_cnt == 5 && o_cnt == 4) cout << "valid\n";
-		else if (x_has && !o_has && x_cnt == o_cnt + 1)cout << "valid\n";
-		else if (!x_has && o_has && x_cnt == o_cnt)cout << "valid\n";
+		if (co > cx) cout << "invalid\n";
+		else if (co == cx) {
+			//0가 이기는 경우
+			if (check_case('O')) cout << "valid\n";
+			else cout << "invalid\n";
+		}
+		else if(cx == co + 1){
+			//X가 이기는 경우
+			if (check_case('X') && !check_case('O')) cout << "valid\n";
+			else if (cx == 5 && co == 4) {// 게임 판이 가득 찾을 경우
+				if (!check_case('X') && !check_case('O')) cout << "valid\n";
+				else cout << "invalid\n";
+			}
+			else cout << "invalid\n";
+		}
 		else cout << "invalid\n";
 	}
 }
