@@ -15,9 +15,10 @@ public class Main {
 			this.x = x;
 			this.y = y;
 		}
+
 		@Override
 		public String toString() {
-			return "[" + x + ", "+ y + "]";
+			return "[" + x + ", " + y + "]";
 		}
 	}
 
@@ -61,18 +62,22 @@ public class Main {
 //		System.out.println();
 
 		for (int i = enemysClone.size() - 1; i >= 0; i--) {
-			if (enemysClone.get(i).x == -1 && enemysClone.get(i).y == -1) {
+			if (enemysClone.get(i).x == -1 && enemysClone.get(i).y == -1) { // 지우는 거
 				enemysClone.remove(i);
 				deleteCnt++;
+			}else {
+				if (++enemysClone.get(i).x >= N) { // 성 진입, 삭제
+					enemysClone.remove(i);
+				}
 			}
 		}
 
-		// 적군 이동
-		for (int i = enemysClone.size() - 1; i >= 0; i--) {
-			if (++enemysClone.get(i).x >= N) { // 성 진입, 삭제
-				enemysClone.remove(i);
-			}
-		}
+//		// 적군 이동
+//		for (int i = enemysClone.size() - 1; i >= 0; i--) {
+//			if (++enemysClone.get(i).x >= N) { // 성 진입, 삭제
+//				enemysClone.remove(i);
+//			}
+//		}
 
 		if (enemysClone.isEmpty())
 			return true;
@@ -80,20 +85,28 @@ public class Main {
 	}
 
 	static void makeEnemys() {
-		for(int i=0;i<enemys.size();i++) {
+		for (int i = 0; i < enemys.size(); i++) {
 			int x = enemys.get(i).x;
 			int y = enemys.get(i).y;
 			enemysClone.add(new Info(x, y));
 		}
 	}
-	
+
+	static void printArchers() {
+		for(int i=0;i<3;i++) {
+			System.out.print(archers[i] + " ");
+		}
+		System.out.println();
+	}
 	static void makeArchers(int cnt, int j) {
 		if (cnt == 3) {
 			// 궁수 설정 완료
+//			printArchers();
 			makeEnemys();
 			deleteCnt = 0;
-			while (!startWar());
-			//System.out.println("deleteNum : " + deleteCnt);
+			while (!startWar())
+				;
+//			System.out.println("deleteNum : " + deleteCnt);
 			result = Math.max(result, deleteCnt);
 			return;
 		}
