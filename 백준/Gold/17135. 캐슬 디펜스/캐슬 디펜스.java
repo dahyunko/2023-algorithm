@@ -6,6 +6,7 @@ public class Main {
 	static int N, M, D, result = 0, deleteCnt;
 	static List<Info> enemys = new LinkedList<>();
 	static List<Info> enemysClone = new LinkedList<>();
+	static List<Integer> deleteEnemys = new LinkedList<>();;
 	static Info[] archers = new Info[3];
 
 	static class Info {
@@ -24,7 +25,7 @@ public class Main {
 
 	static boolean startWar() {
 		int disTemp, enemyNum;
-		List<Integer> deleteEnemys = new LinkedList<>(); // 삭제 적군 저장
+		deleteEnemys.clear(); // 삭제 적군 저장
 
 		// 적군 확인
 		for (int i = 0; i < 3; i++) {
