@@ -48,7 +48,7 @@ public class Main {
     }
 
     static void bfs(boolean visited[][], int x, int y){
-        Queue<Info> q = new LinkedList<>();
+        Deque<Info> q = new ArrayDeque<>();
         q.add(new Info(x, y));
 
         while(!q.isEmpty()){
