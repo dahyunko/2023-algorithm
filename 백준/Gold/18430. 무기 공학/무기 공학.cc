@@ -1,93 +1,73 @@
-#include <stdio.h>
-#include <vector>
-#include <algorithm>
+/*18430*/
 #include <iostream>
-#include <cmath>
-#include <climits>
+#include <algorithm>
 #include <queue>
-#include <map>
-#include <set>
+#include <stack>
+#include <string>
+#include <vector>
+#include <limits.h>
 
 using namespace std;
 
-int N, M;
+int N, M, result = 0;
+int board[6][6];
+bool visited[6][6] = { false };
+int a[4] = { -1, 0, 1, 0 };
+int b[4] = { 0, 1, 0, -1 };
 
-vector<vector<int>> dy = { {0, 1}, {-1, 0}, {-1, 0}, {0, 1} };
-vector<vector<int>> dx = { {-1, 0}, {0, -1}, {0, 1}, {1, 0} };
-
-int DFS(vector<vector<int>>& Boomerang, vector<vector<bool>>& visited, int y, int x)
-{
-    int result = 0;
-
-    for (int i = 0; i < 4; i++)
-    {
-        int y1 = y + dy[i][0];
-        int x1 = x + dx[i][0];
-
-        int y2 = y + dy[i][1];
-        int x2 = x + dx[i][1];
-
-        if (y1 < 0 || y1 >= N || x1 < 0 || x1 >= M) continue;
-        if (y2 < 0 || y2 >= N || x2 < 0 || x2 >= M) continue;
-
-        if (visited[y1][x1] || visited[y2][x2]) continue;
-
-        int currentStrenth = Boomerang[y][x] * 2 + Boomerang[y1][x1] + Boomerang[y2][x2];
-        visited[y][x] = true;
-        visited[y1][x1] = true;
-        visited[y2][x2] = true;
-
-        int temp = 0;
-        int c = x + 1;
-        for (int r = y; r < N; r++)
-        {
-            for (; c < M; c++)
-            {
-                if (visited[r][c]) continue;
-                temp = max(temp, DFS(Boomerang, visited, r, c));
-            }
-            c = 0;
-        }
-
-        visited[y][x] = false;
-        visited[y1][x1] = false;
-        visited[y2][x2] = false;
-
-        result = max(result, currentStrenth + temp);
-    }
-
-    return result;
+bool isTrue(int y, int x) {
+	return (y >= 0 && y < N && x >= 0 && x < M);
 }
 
-int main()
-{
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+int checkBoard(int y, int x) {
+	int result = 0;
 
-    cin >> N >> M;
+	for (int t = 0; t < 4; t++) {
+		int y1 = y + a[t % 4];
+		int x1 = x + b[t % 4];
+		int y2 = y + a[(t + 1) % 4];
+		int x2 = x + b[(t + 1) % 4];
 
-    vector<vector<int>> Boomerang(N, vector<int>(M, 0));
-    vector<vector<bool>> visited(N, vector<bool>(M, false));
+		// 부메랑 만들 수 있는지 확인
+		if (!isTrue(y1, x1) || !isTrue(y2, x2)) continue;
+		if (visited[y1][x1] || visited[y2][x2]) continue;
 
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-        {
-            cin >> Boomerang[i][j];
-        }
-    }
+		visited[y][x] = true;
+		visited[y1][x1] = true;
+		visited[y2][x2] = true;
+		int sum = board[y][x] * 2 + board[y1][x1] + board[y2][x2];
 
-    int answer = 0;
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-        {
-            answer = max(answer, DFS(Boomerang, visited, i, j));
-        }
-    }
+		// 이동할 수 있는 조합 이동
+		int temp = 0;
+		int c = x + 1;
+		for (int i = y; i < N; i++) {
+			for (int j = c; j < M; j++) {
+				if (visited[i][j]) continue;
+				temp = max(temp, checkBoard(i, j));
+			}
+			c = 0;
+		}
+		visited[y1][x1] = false;
+		visited[y2][x2] = false;
+		visited[y][x] = false;
 
-    cout << answer;
+		result = max(result, temp + sum);
+	}
+	
+	return result;
+}
 
-	return 0;
+int main() {
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) cin >> board[i][j];
+	}
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			result = max(checkBoard(i, j), result);
+		}
+	}
+
+	cout << result;
 }
