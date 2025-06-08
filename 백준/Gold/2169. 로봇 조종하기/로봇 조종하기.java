@@ -17,19 +17,28 @@ public class Main {
       st = new StringTokenizer(br.readLine());
       for(int j=1;j<=M;j++){
         graph[i][j] = Integer.parseInt(st.nextToken());
-        for(int w =0;w<3;w++) dp[i][j][w] = -101 * N* M;
-      }  
+        dp[i][j][0] = dp[i][j][1] = dp[i][j][2] = -101 * N * M;
+      }
     }
 
     dp[1][1][0] = dp[1][1][1] = dp[1][1][2] = graph[1][1];
 
     for(int i=1;i<=N;i++){
       for(int j=1;j<=M;j++){
-        if(j > 1) dp[i][j][0] = Math.max(dp[i][j-1][0], dp[i][j-1][1]) + graph[i][j];
-        if(i > 1) dp[i][j][1] = Math.max(dp[i-1][j][0], Math.max(dp[i-1][j][1], dp[i-1][j][2])) + graph[i][j];
-      }  
+
+        // 왼쪽 탐색
+        if(j>1){
+          dp[i][j][0] = Math.max(dp[i][j-1][0], dp[i][j-1][1]) + graph[i][j];
+        }
+        // 위쪽 탐색
+        if(i>1){
+          dp[i][j][1] = Math.max(dp[i-1][j][0], Math.max(dp[i-1][j][1], dp[i-1][j][2])) + graph[i][j];
+        }
+      }
+
+      // 오른쪽 탐색
       for(int j=M-1;j>0;j--){
-        dp[i][j][2] = Math.max(dp[i][j+1][2], dp[i][j+1][1]) + graph[i][j];
+        dp[i][j][2] = Math.max(dp[i][j+1][1], dp[i][j+1][2]) + graph[i][j];
       }
     }
 
