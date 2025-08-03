@@ -21,19 +21,23 @@ public class Main {
       way[i][1] = Integer.parseInt(sb.nextToken());
       way[i][2] = Integer.parseInt(sb.nextToken());
       way[i][3] = Integer.parseInt(sb.nextToken());
+
+      for(int j=0;j<=K;j++){
+        dp[i][j] = -1;
+      }
     }
 
-    dp[0][way[0][0]] = way[0][1];
-    dp[0][way[0][2]] = way[0][3];
+    dp[0][way[0][0]] = Math.max(way[0][1], dp[0][way[0][0]]);
+    dp[0][way[0][2]] = Math.max(way[0][3], dp[0][way[0][2]]);
 
     for(int i=1;i<N;i++){
       for(int j=way[i][0];j<=K;j++){
-        if(dp[i-1][j-way[i][0]] == 0) continue;
+        if(dp[i-1][j-way[i][0]] == -1) continue;
         dp[i][j] = Math.max(dp[i][j], way[i][1] + dp[i-1][j-way[i][0]]);
       }
       
       for(int j=way[i][2];j<=K;j++){
-        if(dp[i-1][j-way[i][2]] == 0) continue;
+        if(dp[i-1][j-way[i][2]] == -1) continue;
         dp[i][j] = Math.max(dp[i][j], way[i][3] + dp[i-1][j-way[i][2]]);
       }
     }
