@@ -24,11 +24,7 @@ public class Main {
     return (x>=0 && x<N && y>=0 && y<N);
   }
 
-  static int bfs(int x, int y){
-
-    for(int i=0;i<N;i++){
-      for(int j=0;j<N;j++) timeBoard[i][j] = Integer.MAX_VALUE;
-    }
+  static void bfs(){
 
     Queue<int[]> q = new LinkedList<>();
     q.add(new int[]{shark.x, shark.y, 0});
@@ -39,10 +35,6 @@ public class Main {
       if(timeBoard[v[0]][v[1]] <= v[2]) continue;
       timeBoard[v[0]][v[1]] = v[2];
 
-      if(v[0] == x && v[1] == y){
-        continue;
-      }
-
       for(int t=0;t<4;t++){
         int xx = v[0] + a[t];
         int yy = v[1] + b[t];
@@ -52,8 +44,6 @@ public class Main {
         }
       }
     }
-
-    return timeBoard[x][y];
   }
 
   public static void main(String[] args) throws Exception {
@@ -86,7 +76,12 @@ public class Main {
     // 상어 잡아 먹기
     while(true){
 
-      // 먹을 수 있는 상어
+      // 먹을 수 있는 상어  
+    for(int i=0;i<N;i++){
+      for(int j=0;j<N;j++) timeBoard[i][j] = Integer.MAX_VALUE;
+    }
+    bfs();
+
       INFO eatShark = new INFO(-1, -1);
       int eatSharkTime = Integer.MAX_VALUE;
       for(int i=1;i<(sharkSize > 6 ? 7 : sharkSize);i++){
@@ -95,7 +90,7 @@ public class Main {
           int yy = sharkList[i].get(j).y;
           
           if(board[xx][yy] == -1) continue;
-          int reachTime = bfs(xx, yy);
+          int reachTime = timeBoard[xx][yy];
 
           // 도달할 수 없음
           if(reachTime == Integer.MAX_VALUE) continue;
