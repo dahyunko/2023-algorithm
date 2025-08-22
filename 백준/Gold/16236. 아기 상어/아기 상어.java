@@ -8,6 +8,7 @@ public class Main {
   static List<INFO>[] sharkList = new ArrayList[7];
   static int[] a = {0, 0, 1, -1};
   static int[] b = {1, -1, 0, 0};
+  static int[][] timeBoard;
 
   static class INFO{
     int x, y;
@@ -24,7 +25,6 @@ public class Main {
   }
 
   static int bfs(int x, int y){
-    int[][] timeBoard = new int[N][N];
 
     for(int i=0;i<N;i++){
       for(int j=0;j<N;j++) timeBoard[i][j] = Integer.MAX_VALUE;
@@ -62,6 +62,7 @@ public class Main {
 
     N = Integer.parseInt(br.readLine());
     board = new int[N][N];
+    timeBoard = new int[N][N];
 
     // init
     for(int i=0;i<7;i++){
