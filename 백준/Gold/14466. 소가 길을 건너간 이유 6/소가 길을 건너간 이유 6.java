@@ -63,22 +63,27 @@ public class Main {
       cow[i][1] = Integer.parseInt(st.nextToken()) - 1;
     }
 
-    for(int i=0;i<K-1;i++){
-      ArrayDeque<int[]> q = new ArrayDeque<>();
-      q.add(cow[i]);
-      boolean[][] visited = new boolean[N][N];
+    int[][] group = new int[N][N];
+    int flag = 0;
+    for(int i=0;i<N;i++) {
+      for(int j=0;j<N;j++) {
+        if(group[i][j] > 0 ) continue;
+        flag++;
 
-      while (!q.isEmpty()) {
-        int[] v = q.poll();
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{i, j});
 
-        if(visited[v[0]][v[1]]) continue;
-        visited[v[0]][v[1]] = true;
+        while(!q.isEmpty()) {
+          int[] v = q.poll();
 
-        for(int t=0;t<4;t++){
+          if(group[v[0]][v[1]] == flag) continue;
+          group[v[0]][v[1]] = flag;
+
+          for(int t=0;t<4;t++){
           int xx = v[0] + x[t];
           int yy = v[1] + y[t];
 
-          if(isIn(xx, yy) && !visited[xx][yy]) {
+          if(isIn(xx, yy) && group[xx][yy] == 0) {
             int idx = findRoad(v[0], v[1], xx, yy);
 
             // 길 있어서 접근 불가
@@ -89,13 +94,18 @@ public class Main {
             q.add(next);
           }
         }
-      }
-
-      for(int j=i+1;j<K;j++) {
-        if(!visited[cow[j][0]][cow[j][1]]) cnt++;
+        }
       }
     }
 
-    System.out.println(cnt);
+    for(int i=0;i<K;i++) {
+      for(int j=i+1;j<K;j++) {
+        if(group[cow[i][0]][cow[i][1]] != 0 && group[cow[i][0]][cow[i][1]] == group[cow[j][0]][cow[j][1]]){
+          cnt++;
+        }
+      }
+    }
+
+    System.out.println(K * (K-1) / 2 - cnt);
   }
 }
