@@ -9,7 +9,6 @@ public class Main {
     StringTokenizer st = new StringTokenizer(br.readLine());
     int N = Integer.parseInt(st.nextToken());
     int M = Integer.parseInt(st.nextToken());
-    int total = 0;
 
     List<int[]> shark = new LinkedList<>();
 
@@ -18,7 +17,6 @@ public class Main {
       for(int j=0;j<M;j++) {
         int now = Integer.parseInt(st.nextToken());
         if(now == 0) continue;
-        total++;
         shark.add(new int[]{i, j});
       }
     }
@@ -28,9 +26,7 @@ public class Main {
       for(int j=0;j<M;j++) {
         int result = Integer.MAX_VALUE;
         for(int[] s: shark) {
-          int x = Math.abs(i - s[0]);
-          int y = Math.abs(j - s[1]);
-          result = Math.min(result, Math.max(x, y));
+          result = Math.min(result, Math.max(Math.abs(i - s[0]), Math.abs(j - s[1])));
         }
         ans = Math.max(ans, result);
       }
