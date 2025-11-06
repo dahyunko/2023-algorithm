@@ -14,10 +14,8 @@ public class Main{
     visited[v] = true;
 
     if(depth > 0) {
-      String str = "";
-      for(int i=0;i<depth-1;i++) str += "--";
-      str += words.get(v);
-      sb.append(str);
+      for(int i=0;i<depth-1;i++) sb.append("--");
+      sb.append(words.get(v));
       sb.append("\n");
     }
 
