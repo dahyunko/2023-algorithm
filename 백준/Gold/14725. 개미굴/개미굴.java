@@ -7,6 +7,7 @@ public class Main{
   static List<String> words = new ArrayList<>();
   static List<List<Integer>> graph = new ArrayList<>();
   static boolean[] visited;
+  static StringBuilder sb = new StringBuilder();
 
   static void dfs(int v, int depth) {
     if(visited[v]) return;
@@ -16,7 +17,8 @@ public class Main{
       String str = "";
       for(int i=0;i<depth-1;i++) str += "--";
       str += words.get(v);
-      System.out.println(str);
+      sb.append(str);
+      sb.append("\n");
     }
 
     for(int next : graph.get(v)) {
@@ -53,8 +55,7 @@ public class Main{
       for(int j=0;j<list.length;j++) {
         int next = -1;
 
-        for(int v=0;v<graph.get(idx).size();v++) {
-          int node = graph.get(idx).get(v);
+        for(int node : graph.get(idx)) {
           if(words.get(node).equals(list[j])) {
             next = node;
             break;
@@ -63,9 +64,9 @@ public class Main{
 
         if(next == -1) {
           words.add(list[j]);
+          graph.add(new ArrayList<>());
           next = words.size() - 1;
           graph.get(idx).add(next);
-          graph.add(new ArrayList<>());
         }
         idx = next;
       }
@@ -74,5 +75,7 @@ public class Main{
     // print
     visited = new boolean[words.size()];
     dfs(0, 0);
+
+    System.out.println(sb.toString());
   }
 }
