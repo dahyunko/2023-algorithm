@@ -51,7 +51,13 @@ public class Main {
           notVisit = true;
         }
         list.add(dp[child]);
-      } 
+      }
+      
+      if(notVisit) {
+        q.add(v);
+        continue;
+      }
+
       Collections.sort(list, Comparator.reverseOrder());
       
       int temp = graph[v].size();
@@ -59,10 +65,6 @@ public class Main {
         temp = Math.max(temp, list.get(i) + i);
       }
 
-      if(notVisit) {
-        q.add(v);
-        continue;
-      }
       dp[v] = temp + 1;
       if(parent[v] != -1) q.add(parent[v]);
     }
