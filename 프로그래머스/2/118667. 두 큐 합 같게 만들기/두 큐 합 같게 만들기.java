@@ -4,10 +4,7 @@ import java.util.*;
 class Solution {
     static int calCnt (int S, int E, int mid) {
         if(mid == E) {return S - 1;}
-        else if(mid < E){
-            if(S <= mid) {return S - 1 + E - mid;}
-            else {return S + E - mid - 1;}
-        }
+        else if(mid < E){return S - 1 + E - mid;}
         else {return S + E + mid - 1;}
     }
     
